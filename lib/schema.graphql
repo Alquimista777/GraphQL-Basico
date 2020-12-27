@@ -21,4 +21,5 @@ input CourseInput {
 type Mutation {
   "Crea un curso"
   createCourse(input: CourseInput!): Course
+  deleteCourse(id: ID!): String
 }
