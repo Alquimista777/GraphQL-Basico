@@ -1,25 +1,74 @@
-  type Query {
-    "Devuelve todos los cursos"
-   getCourses: [Course]
-   "Devuele un curso"
-   getCourse(id: ID!): Course
-  }
+type Query {
+  "get all courses"
+  getAllCourses: [Course]
+  "get course by Id"
+  getCourseById(id: ID!): Course
+
+  "get all students"
+  getAllStudents: [Student]
+  "get student by Id"
+  getStudentById(id: ID!): Student
+}
 
 type Course {
-  _id: ID!,
-  title: String!,
-  topic: String,
-  teacher: String,
+  _id: ID!
+  title: String!
+
+  nivel: Nivel
+  topic: String
+  teacher: String
+  description: String
+
+  people: [Student]
 }
 
 input CourseInput {
-  title: String!,
-  topic: String,
-  teacher: String,
+  title: String
+  description: String
+
+  nivel: Nivel
+  topic: String
+  teacher: String
+}
+
+type Student {
+  _id: ID!
+  name: String!
+  email: String!
+}
+
+input StudentInput {
+  name: String
+  email: String
+}
+
+enum Nivel {
+  facil
+  medio
+  dificil
 }
 
 type Mutation {
-  "Crea un curso"
-  createCourse(input: CourseInput!): Course
-  deleteCourse(id: ID!): String
+  "Create a course"
+  createCourse(course: CourseInput!): Course
+  createManyCourse(courses: [CourseInput]): [CourseInput] 
+  "put course by Id"
+  putCourseById(id: ID!, course: CourseInput!): Course
+  "delete Course by Id"
+  deleteCourseById(id: ID!): String
+  "delete all courses"
+  deleteAllCourses: String
+
+  "Create a student"
+  createStudent(student: StudentInput!): Student
+  "put student by Id"
+  putStudentById(id: ID!, student: StudentInput!): Student
+ "delete student by Id"
+  deleteStudentById(id: ID!): String
+  "delete all students"
+  deleteAllStudents: String
+
+
+  "Agrega una persona a un curso"
+  addPeopleToCourse(courseID: ID!, personID: ID!): Course 
 }

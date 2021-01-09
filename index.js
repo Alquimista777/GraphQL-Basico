@@ -1,32 +1,30 @@
 'use stric'
 
 require('dotenv').config()
-const { join } = require('path')
-const express = require('express')
-const { readFileSync } = require('fs')
-const { makeExecutableSchema } = require('graphql-tools')
-const { graphqlHTTP } = require('express-graphql')
-const resolvers = require('./lib/resolves');
+const LOG = require('debug')('app')
+const { join } = require('path');
+const { readFileSync } = require('fs');
+const { graphqlHTTP  } = require('express-graphql');
+const { makeExecutableSchema } = require('graphql-tools');
+const resolvers = require('./lib/resolves')
 
-const app = express()
-const port = process.env.port || 3000
+// App init
+const app = require('express')();
+const port = process.env.port || 3000;
 
 // Definiendo el schema
-const typeDefs = readFileSync(
-  join(__dirname, 'lib', 'schema.graphql'),
-  'utf-8'
-  )
+const typeDefs = readFileSync(join(__dirname, 'lib', 'schema.graphql'), 'utf-8')
 const schema = makeExecutableSchema({ typeDefs, resolvers })
-  
 
-// // Ejecutar
-// graphql(schema, '{ hello, saludo }', resolves).then(console.log)
-
+// Routes
 app.use('/api', graphqlHTTP({
-  schema: schema,
-  rootValue: resolvers,
-  graphiql: true
-})
+    schema: schema,
+    rootValue: resolvers,
+    graphiql: true
+  }), (req, res) => {
+    LOG('API')
+  }
 )
 
-app.listen(port, () => { console.log(`Server is run ${port}`) })
+// Serve listend
+app.listen(port, () => { console.log( `Server is run ${port}`) })
