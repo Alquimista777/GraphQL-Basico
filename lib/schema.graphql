@@ -4,8 +4,8 @@ type Query {
   "get course by Id"
   getCourseById(id: ID!): Course
 
-  "get all students"
-  getAllStudents: [Student]
+  "get people"
+  getPeople: [Person]
   "get student by Id"
   getStudentById(id: ID!): Student
 }
@@ -31,15 +31,31 @@ input CourseInput {
   teacher: String
 }
 
-type Student {
-  _id: ID!
+interface Person {
+ _id: ID!
   name: String!
   email: String!
 }
 
-input StudentInput {
+type Student implements Person {
+  _id: ID!
+  name: String!
+  email: String!
+  avatar: String
+}
+
+type Monitor implements Person {
+  _id: ID!
+  name: String!
+  email: String!
+  phone: String
+}
+
+input PersonInput {
   name: String
   email: String
+  phone: String
+  avatar: String
 }
 
 enum Nivel {
@@ -51,7 +67,7 @@ enum Nivel {
 type Mutation {
   "Create a course"
   createCourse(course: CourseInput!): Course
-  createManyCourse(courses: [CourseInput]): [CourseInput] 
+  createManyCourse(courses: [CourseInput]): [Course] 
   "put course by Id"
   putCourseById(id: ID!, course: CourseInput!): Course
   "delete Course by Id"
@@ -60,9 +76,9 @@ type Mutation {
   deleteAllCourses: String
 
   "Create a student"
-  createStudent(student: StudentInput!): Student
+  createPerson(input: PersonInput!): Person
   "put student by Id"
-  putStudentById(id: ID!, student: StudentInput!): Student
+  putPersonById(id: ID!, input: PersonInput!): Person
  "delete student by Id"
   deleteStudentById(id: ID!): String
   "delete all students"
@@ -70,5 +86,5 @@ type Mutation {
 
 
   "Agrega una persona a un curso"
-  addPeopleToCourse(courseID: ID!, personID: ID!): Course 
+  addPeopleToCourse(courseID: ID!, personID: ID!): Course
 }
