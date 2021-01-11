@@ -8,6 +8,9 @@ type Query {
   getPeople: [Person]
   "get student by Id"
   getStudentById(id: ID!): Student
+
+  "Ejecuta una busqueda global"
+  searchItems(keyword: String!): [GlobalSearch]
 }
 
 type Course {
@@ -21,6 +24,8 @@ type Course {
 
   people: [Student]
 }
+
+union GlobalSearch = Course | Student | Monitor
 
 input CourseInput {
   title: String
